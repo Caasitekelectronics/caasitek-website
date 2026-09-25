@@ -27,7 +27,7 @@
 
       <img
         id="adminLogo"
-        src="YOUR_LOGO_URL_HERE"
+        src=""
         alt="CAASITEK Logo"
         style="
           width:70px;
@@ -41,9 +41,36 @@
 
       <div>
         <h1 style="margin:0;">CAASITEK Admin</h1>
-        <p style="margin:6px 0 0;color:#666;">
+
+        <p style="margin:6px 0 10px;color:#666;">
           Manage your products and online store.
         </p>
+
+        <label
+          for="logoInput"
+          style="
+            display:inline-block;
+            padding:9px 14px;
+            background:#f28c00;
+            color:#fff;
+            border-radius:8px;
+            cursor:pointer;
+          "
+        >
+          Upload Logo
+        </label>
+
+        <input
+          id="logoInput"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          style="display:none;"
+        >
+
+        <p
+          id="logoMessage"
+          style="margin:8px 0 0;color:#666;"
+        ></p>
       </div>
 
       <button
@@ -247,6 +274,24 @@
     const cancelButton =
       document.getElementById("cancelButton");
 
+    const adminLogo =
+      document.getElementById("adminLogo");
+
+    const logoInput =
+      document.getElementById("logoInput");
+
+    const logoMessage =
+      document.getElementById("logoMessage");
+
+
+    const LOGO_PATH =
+      "logo.png";
+
+    const LOGO_URL =
+      SUPABASE_URL +
+      "/storage/v1/object/public/site-assets/" +
+      LOGO_PATH;
+
 
     async function checkUser() {
 
@@ -280,6 +325,82 @@
     }
 
 
+    function loadLogo() {
+
+      adminLogo.src =
+        LOGO_URL +
+        "?v=" +
+        Date.now();
+    }
+
+
+    logoInput.addEventListener(
+      "change",
+      async () => {
+
+        const file =
+          logoInput.files[0];
+
+        if (!file) return;
+
+
+        if (
+          ![
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+          ].includes(file.type)
+        ) {
+
+          logoMessage.textContent =
+            "Please choose a PNG, JPG or WEBP image.";
+
+          return;
+        }
+
+
+        logoMessage.textContent =
+          "Uploading logo...";
+
+
+        const {
+          error
+        } = await supabase
+          .storage
+          .from("site-assets")
+          .upload(
+            LOGO_PATH,
+            file,
+            {
+              upsert:true,
+              contentType:file.type
+            }
+          );
+
+
+        if (error) {
+
+          console.error(error);
+
+          logoMessage.textContent =
+            "Logo upload failed: " +
+            error.message;
+
+          return;
+        }
+
+
+        logoMessage.textContent =
+          "Logo uploaded successfully.";
+
+        adminLogo.src =
+          LOGO_URL +
+          "?v=" +
+          Date.now();
+      }
+    );
+
+
     async function loadProducts() {
 
       productsContainer.innerHTML =
@@ -293,7 +414,7 @@
         .from("products")
         .select("*")
         .order("created_at", {
-          ascending: false
+          ascending:false
         });
 
 
@@ -379,6 +500,7 @@
                 </p>
 
                 <p style="margin:6px 0;">
+
                   ${
                     product.active
                     ? "🟢 Active"
@@ -390,6 +512,7 @@
                     ? " • ⭐ Featured"
                     : ""
                   }
+
                 </p>
 
               </div>
@@ -503,6 +626,7 @@
       saveButton.textContent =
         "Update Product";
 
+
       window.scrollTo({
         top:0,
         behavior:"smooth"
@@ -517,8 +641,8 @@
       } = await supabase
         .from("products")
         .update({
-          active: !current,
-          updated_at: new Date().toISOString()
+          active:!current,
+          updated_at:new Date().toISOString()
         })
         .eq("id", id);
 
@@ -542,8 +666,8 @@
       } = await supabase
         .from("products")
         .update({
-          featured: !current,
-          updated_at: new Date().toISOString()
+          featured:!current,
+          updated_at:new Date().toISOString()
         })
         .eq("id", id);
 
@@ -616,7 +740,9 @@
             document.getElementById("category").value.trim(),
 
           price:
-            Number(document.getElementById("price").value),
+            Number(
+              document.getElementById("price").value
+            ),
 
           storage:
             document.getElementById("storage").value.trim(),
@@ -628,7 +754,9 @@
             document.getElementById("warranty").value.trim(),
 
           stock:
-            Number(document.getElementById("stock").value),
+            Number(
+              document.getElementById("stock").value
+            ),
 
           image:
             document.getElementById("image").value.trim(),
@@ -735,6 +863,8 @@
 
 
     if (user) {
+
+      loadLogo();
 
       try {
 

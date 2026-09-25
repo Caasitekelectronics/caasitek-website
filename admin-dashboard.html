@@ -105,6 +105,7 @@
         <input type="hidden" id="productId">
 
         <label>Product Name</label>
+
         <input
           id="name"
           type="text"
@@ -112,7 +113,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Category</label>
+
         <input
           id="category"
           type="text"
@@ -120,7 +123,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Price</label>
+
         <input
           id="price"
           type="number"
@@ -128,7 +133,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Storage</label>
+
         <input
           id="storage"
           type="text"
@@ -136,7 +143,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Condition</label>
+
         <input
           id="condition"
           type="text"
@@ -144,7 +153,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Warranty</label>
+
         <input
           id="warranty"
           type="text"
@@ -152,7 +163,9 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
+
         <label>Stock</label>
+
         <input
           id="stock"
           type="number"
@@ -160,30 +173,65 @@
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         >
 
-        <label>Product Image URL</label>
+
+        <!-- PRODUCT IMAGE UPLOAD -->
+
+        <label>Product Image</label>
+
         <input
-          id="image"
-          type="url"
-          placeholder="Paste image URL"
-          style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
+          id="imageFile"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          style="
+            display:block;
+            width:100%;
+            padding:12px;
+            margin:8px 0 10px;
+            box-sizing:border-box;
+          "
         >
 
+        <img
+          id="imagePreview"
+          src=""
+          alt="Product preview"
+          style="
+            display:none;
+            width:140px;
+            height:140px;
+            object-fit:contain;
+            border-radius:12px;
+            margin-bottom:16px;
+            border:1px solid #ddd;
+          "
+        >
+
+        <input
+          id="image"
+          type="hidden"
+        >
+
+
         <label>Description</label>
+
         <textarea
           id="description"
           rows="4"
           style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
         ></textarea>
 
+
         <label style="display:block;margin-bottom:12px;">
           <input id="featured" type="checkbox">
           Featured product
         </label>
 
+
         <label style="display:block;margin-bottom:18px;">
           <input id="active" type="checkbox" checked>
           Active / visible on website
         </label>
+
 
         <button
           type="submit"
@@ -197,6 +245,7 @@
         >
           Save Product
         </button>
+
 
         <button
           type="button"
@@ -212,6 +261,7 @@
           Cancel
         </button>
 
+
         <p id="message"></p>
 
       </form>
@@ -220,6 +270,7 @@
 
 
     <!-- PRODUCTS -->
+
     <section>
 
       <h2>Products</h2>
@@ -242,6 +293,7 @@
     const SUPABASE_URL =
       "https://njvagupehnpmzjxjebfy.supabase.co";
 
+
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_My7phM94P5foLkK565nkXw_Pj8DlShZ";
 
@@ -256,40 +308,67 @@
       "isaacmwale3024@icloud.com";
 
 
+    const STORAGE_BUCKET =
+      "product-images";
+
+
     const form =
       document.getElementById("productForm");
+
 
     const productsContainer =
       document.getElementById("productsContainer");
 
+
     const message =
       document.getElementById("message");
+
 
     const saveButton =
       document.getElementById("saveButton");
 
+
     const logoutButton =
       document.getElementById("logoutButton");
+
 
     const cancelButton =
       document.getElementById("cancelButton");
 
+
     const adminLogo =
       document.getElementById("adminLogo");
 
+
     const logoInput =
       document.getElementById("logoInput");
+
 
     const logoMessage =
       document.getElementById("logoMessage");
 
 
+    const imageFile =
+      document.getElementById("imageFile");
+
+
+    const imagePreview =
+      document.getElementById("imagePreview");
+
+
+    const image =
+      document.getElementById("image");
+
+
     const LOGO_PATH =
-      "logo.png";
+      "site-logo.png";
+
 
     const LOGO_URL =
       SUPABASE_URL +
-      "/storage/v1/object/public/site-assets/" +
+      "/storage/v1/object/public/" +
+      STORAGE_BUCKET +
+      "/" +
       LOGO_PATH;
 
 
@@ -300,6 +379,7 @@
         error
       } = await supabase.auth.getUser();
 
+
       if (error || !data.user) {
 
         window.location.href =
@@ -307,6 +387,7 @@
 
         return null;
       }
+
 
       if (
         data.user.email.toLowerCase() !==
@@ -321,7 +402,9 @@
         return null;
       }
 
+
       return data.user;
+
     }
 
 
@@ -331,8 +414,11 @@
         LOGO_URL +
         "?v=" +
         Date.now();
+
     }
 
+
+    // LOGO UPLOAD
 
     logoInput.addEventListener(
       "change",
@@ -340,6 +426,7 @@
 
         const file =
           logoInput.files[0];
+
 
         if (!file) return;
 
@@ -356,6 +443,7 @@
             "Please choose a PNG, JPG or WEBP image.";
 
           return;
+
         }
 
 
@@ -367,7 +455,7 @@
           error
         } = await supabase
           .storage
-          .from("site-assets")
+          .from(STORAGE_BUCKET)
           .upload(
             LOGO_PATH,
             file,
@@ -387,18 +475,109 @@
             error.message;
 
           return;
+
         }
 
 
         logoMessage.textContent =
           "Logo uploaded successfully.";
 
+
         adminLogo.src =
           LOGO_URL +
           "?v=" +
           Date.now();
+
       }
     );
+
+
+    // PRODUCT IMAGE PREVIEW
+
+    imageFile.addEventListener(
+      "change",
+      () => {
+
+        const file =
+          imageFile.files[0];
+
+
+        if (!file) return;
+
+
+        const url =
+          URL.createObjectURL(file);
+
+
+        imagePreview.src =
+          url;
+
+
+        imagePreview.style.display =
+          "block";
+
+      }
+    );
+
+
+    // PRODUCT IMAGE UPLOAD
+
+    async function uploadProductImage(file) {
+
+      if (!file) return null;
+
+
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+
+      const fileName =
+        "product-" +
+        Date.now() +
+        "-" +
+        Math.random()
+          .toString(36)
+          .substring(2,8) +
+        "." +
+        extension;
+
+
+      const {
+        error
+      } = await supabase
+        .storage
+        .from(STORAGE_BUCKET)
+        .upload(
+          fileName,
+          file,
+          {
+            upsert:false,
+            contentType:file.type
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      const {
+        data
+      } = supabase
+        .storage
+        .from(STORAGE_BUCKET)
+        .getPublicUrl(fileName);
+
+
+      return data.publicUrl;
+
+    }
 
 
     async function loadProducts() {
@@ -427,6 +606,7 @@
           error.message;
 
         return;
+
       }
 
 
@@ -436,6 +616,7 @@
           "No products found.";
 
         return;
+
       }
 
 
@@ -484,20 +665,31 @@
                 </div>`
               }
 
+
               <div style="flex:1;">
 
                 <h3 style="margin:0 0 6px;">
                   ${product.name}
                 </h3>
 
+
                 <strong>
                   K${Number(product.price || 0).toLocaleString()}
                 </strong>
 
+
                 <p style="margin:6px 0;color:#666;">
+
                   ${product.storage || ""}
-                  ${product.condition ? " • " + product.condition : ""}
+
+                  ${
+                    product.condition
+                    ? " • " + product.condition
+                    : ""
+                  }
+
                 </p>
+
 
                 <p style="margin:6px 0;">
 
@@ -527,12 +719,14 @@
               margin-top:15px;
             ">
 
+
               <button
                 onclick="editProduct('${product.id}')"
                 style="padding:9px 14px;cursor:pointer;"
               >
                 Edit
               </button>
+
 
               <button
                 onclick="toggleActive('${product.id}', ${product.active})"
@@ -541,12 +735,14 @@
                 ${product.active ? "Hide" : "Activate"}
               </button>
 
+
               <button
                 onclick="toggleFeatured('${product.id}', ${product.featured})"
                 style="padding:9px 14px;cursor:pointer;"
               >
                 ${product.featured ? "Unfeature" : "Feature"}
               </button>
+
 
               <button
                 onclick="deleteProduct('${product.id}')"
@@ -555,164 +751,210 @@
                 Delete
               </button>
 
+
             </div>
 
           </article>
 
         `).join("");
+
     }
 
 
-    window.editProduct = async function(id) {
+    window.editProduct =
+      async function(id) {
 
-      const {
-        data,
-        error
-      } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-
-      if (error) {
-
-        alert(error.message);
-
-        return;
-      }
+        const {
+          data,
+          error
+        } = await supabase
+          .from("products")
+          .select("*")
+          .eq("id", id)
+          .single();
 
 
-      document.getElementById("productId").value =
-        data.id;
+        if (error) {
 
-      document.getElementById("name").value =
-        data.name || "";
+          alert(error.message);
 
-      document.getElementById("category").value =
-        data.category || "";
+          return;
 
-      document.getElementById("price").value =
-        data.price || "";
-
-      document.getElementById("storage").value =
-        data.storage || "";
-
-      document.getElementById("condition").value =
-        data.condition || "";
-
-      document.getElementById("warranty").value =
-        data.warranty || "";
-
-      document.getElementById("stock").value =
-        data.stock || 0;
-
-      document.getElementById("image").value =
-        data.image || "";
-
-      document.getElementById("description").value =
-        data.description || "";
-
-      document.getElementById("featured").checked =
-        !!data.featured;
-
-      document.getElementById("active").checked =
-        !!data.active;
+        }
 
 
-      document.getElementById("formTitle").textContent =
-        "Edit Product";
-
-      saveButton.textContent =
-        "Update Product";
+        document.getElementById("productId").value =
+          data.id;
 
 
-      window.scrollTo({
-        top:0,
-        behavior:"smooth"
-      });
-    };
+        document.getElementById("name").value =
+          data.name || "";
 
 
-    window.toggleActive = async function(id, current) {
-
-      const {
-        error
-      } = await supabase
-        .from("products")
-        .update({
-          active:!current,
-          updated_at:new Date().toISOString()
-        })
-        .eq("id", id);
+        document.getElementById("category").value =
+          data.category || "";
 
 
-      if (error) {
-
-        alert(error.message);
-
-        return;
-      }
+        document.getElementById("price").value =
+          data.price || "";
 
 
-      await loadProducts();
-    };
+        document.getElementById("storage").value =
+          data.storage || "";
 
 
-    window.toggleFeatured = async function(id, current) {
-
-      const {
-        error
-      } = await supabase
-        .from("products")
-        .update({
-          featured:!current,
-          updated_at:new Date().toISOString()
-        })
-        .eq("id", id);
+        document.getElementById("condition").value =
+          data.condition || "";
 
 
-      if (error) {
-
-        alert(error.message);
-
-        return;
-      }
+        document.getElementById("warranty").value =
+          data.warranty || "";
 
 
-      await loadProducts();
-    };
+        document.getElementById("stock").value =
+          data.stock || 0;
 
 
-    window.deleteProduct = async function(id) {
-
-      if (
-        !confirm(
-          "Delete this product?"
-        )
-      ) {
-        return;
-      }
+        document.getElementById("image").value =
+          data.image || "";
 
 
-      const {
-        error
-      } = await supabase
-        .from("products")
-        .delete()
-        .eq("id", id);
+        document.getElementById("description").value =
+          data.description || "";
 
 
-      if (error) {
-
-        alert(error.message);
-
-        return;
-      }
+        document.getElementById("featured").checked =
+          !!data.featured;
 
 
-      await loadProducts();
-    };
+        document.getElementById("active").checked =
+          !!data.active;
+
+
+        if (data.image) {
+
+          imagePreview.src =
+            data.image;
+
+          imagePreview.style.display =
+            "block";
+
+        } else {
+
+          imagePreview.style.display =
+            "none";
+
+        }
+
+
+        document.getElementById("formTitle").textContent =
+          "Edit Product";
+
+
+        saveButton.textContent =
+          "Update Product";
+
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      };
+
+
+    window.toggleActive =
+      async function(id,current) {
+
+        const {
+          error
+        } = await supabase
+          .from("products")
+          .update({
+            active:!current,
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq("id",id);
+
+
+        if (error) {
+
+          alert(error.message);
+
+          return;
+
+        }
+
+
+        await loadProducts();
+
+      };
+
+
+    window.toggleFeatured =
+      async function(id,current) {
+
+        const {
+          error
+        } = await supabase
+          .from("products")
+          .update({
+            featured:!current,
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq("id",id);
+
+
+        if (error) {
+
+          alert(error.message);
+
+          return;
+
+        }
+
+
+        await loadProducts();
+
+      };
+
+
+    window.deleteProduct =
+      async function(id) {
+
+        if (
+          !confirm(
+            "Delete this product?"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const {
+          error
+        } = await supabase
+          .from("products")
+          .delete()
+          .eq("id",id);
+
+
+        if (error) {
+
+          alert(error.message);
+
+          return;
+
+        }
+
+
+        await loadProducts();
+
+      };
 
 
     form.addEventListener(
@@ -721,99 +963,166 @@
 
         event.preventDefault();
 
-        saveButton.disabled = true;
+
+        saveButton.disabled =
+          true;
+
 
         message.textContent =
           "Saving...";
 
 
-        const id =
-          document.getElementById("productId").value;
+        try {
+
+          const id =
+            document.getElementById(
+              "productId"
+            ).value;
 
 
-        const product = {
-
-          name:
-            document.getElementById("name").value.trim(),
-
-          category:
-            document.getElementById("category").value.trim(),
-
-          price:
-            Number(
-              document.getElementById("price").value
-            ),
-
-          storage:
-            document.getElementById("storage").value.trim(),
-
-          condition:
-            document.getElementById("condition").value.trim(),
-
-          warranty:
-            document.getElementById("warranty").value.trim(),
-
-          stock:
-            Number(
-              document.getElementById("stock").value
-            ),
-
-          image:
-            document.getElementById("image").value.trim(),
-
-          description:
-            document.getElementById("description").value.trim(),
-
-          featured:
-            document.getElementById("featured").checked,
-
-          active:
-            document.getElementById("active").checked,
-
-          updated_at:
-            new Date().toISOString()
-        };
+          let imageUrl =
+            image.value.trim();
 
 
-        let result;
+          // Upload new product image if selected
+
+          if (imageFile.files[0]) {
+
+            message.textContent =
+              "Uploading product image...";
 
 
-        if (id) {
+            imageUrl =
+              await uploadProductImage(
+                imageFile.files[0]
+              );
 
-          result =
-            await supabase
-              .from("products")
-              .update(product)
-              .eq("id", id);
-
-        } else {
-
-          result =
-            await supabase
-              .from("products")
-              .insert(product);
-        }
+          }
 
 
-        if (result.error) {
+          const product = {
+
+            name:
+              document
+                .getElementById("name")
+                .value
+                .trim(),
+
+            category:
+              document
+                .getElementById("category")
+                .value
+                .trim(),
+
+            price:
+              Number(
+                document
+                  .getElementById("price")
+                  .value
+              ),
+
+            storage:
+              document
+                .getElementById("storage")
+                .value
+                .trim(),
+
+            condition:
+              document
+                .getElementById("condition")
+                .value
+                .trim(),
+
+            warranty:
+              document
+                .getElementById("warranty")
+                .value
+                .trim(),
+
+            stock:
+              Number(
+                document
+                  .getElementById("stock")
+                  .value
+              ),
+
+            image:
+              imageUrl,
+
+            description:
+              document
+                .getElementById("description")
+                .value
+                .trim(),
+
+            featured:
+              document
+                .getElementById("featured")
+                .checked,
+
+            active:
+              document
+                .getElementById("active")
+                .checked,
+
+            updated_at:
+              new Date().toISOString()
+
+          };
+
+
+          let result;
+
+
+          if (id) {
+
+            result =
+              await supabase
+                .from("products")
+                .update(product)
+                .eq("id",id);
+
+          } else {
+
+            result =
+              await supabase
+                .from("products")
+                .insert(product);
+
+          }
+
+
+          if (result.error) {
+
+            throw result.error;
+
+          }
+
 
           message.textContent =
-            result.error.message;
+            "Product saved successfully.";
 
-          saveButton.disabled = false;
 
-          return;
+          resetForm();
+
+
+          await loadProducts();
+
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          message.textContent =
+            "Error: " +
+            error.message;
+
         }
 
 
-        message.textContent =
-          "Product saved successfully.";
-
-        resetForm();
-
-        await loadProducts();
-
-        saveButton.disabled = false;
+        saveButton.disabled =
+          false;
 
       }
     );
@@ -823,20 +1132,38 @@
 
       form.reset();
 
-      document.getElementById("productId").value =
-        "";
 
-      document.getElementById("active").checked =
-        true;
+      document.getElementById(
+        "productId"
+      ).value = "";
 
-      document.getElementById("formTitle").textContent =
+
+      document.getElementById(
+        "active"
+      ).checked = true;
+
+
+      document.getElementById(
+        "formTitle"
+      ).textContent =
         "Add Product";
+
 
       saveButton.textContent =
         "Save Product";
 
+
+      imagePreview.style.display =
+        "none";
+
+
+      imagePreview.src =
+        "";
+
+
       message.textContent =
         "";
+
     }
 
 
@@ -854,6 +1181,7 @@
 
         window.location.href =
           "admin.html";
+
       }
     );
 
@@ -865,6 +1193,7 @@
     if (user) {
 
       loadLogo();
+
 
       try {
 

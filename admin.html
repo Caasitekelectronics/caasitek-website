@@ -1,68 +1,98 @@
-Code
-•••/ caasitek-website »
-Issues
-Pull requests
-Actions
-More
-< Files
-caasitek-website admin.html
-Commit changes...
-in main
-Cancel changes
-Edit
-Preview
-Spaces
-1
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-20
-27
-28
-<
-2
-No wrap
-‹! doctype html>
-<html lang="en"›
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-‹meta
-name="viewport" content="width=device-wi
-<title>CAASITEK Admin</title›
-<link rel="stylesheet" href="styles.css" ›
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CAASITEK Admin</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<main style="max-width:520px;margin:10vh auto;
-<a class="brand" href="index.htm1">
-‹span>CT</span> CAASITEK
-</a>
-<h1>Admin Login</h1>
-<p>Sign in to manage your CAASITEK store.</p
-<form id="loginForm">
-<label>Email</label>
-<input
-id="email"
-github.com
-•••
-TequITed
-style="display:block;width:100%;padding:
+  <main style="max-width:520px;margin:10vh auto;padding:24px;">
+    <a class="brand" href="index.html">
+      <span>CT</span> CAASITEK
+    </a>
+
+    <h1>Admin Login</h1>
+    <p>Sign in to manage your CAASITEK store.</p>
+
+    <form id="loginForm">
+      <label for="email">Email</label>
+
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        required
+        style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
+      >
+
+      <label for="password">Password</label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+        style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"
+      >
+
+      <button
+        id="loginButton"
+        type="submit"
+        style="padding:12px 20px;cursor:pointer;"
+      >
+        Sign In
+      </button>
+
+      <p id="message"></p>
+    </form>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL =
+      "https://njvagupehnpmzjxjebfy.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_My7phM94P5foLkK565nkXw_Pj8DlShZ";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      message.textContent = "Signing in...";
+      loginButton.disabled = true;
+
+      const { data, error } =
+        await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+      if (error) {
+        message.textContent = error.message;
+        loginButton.disabled = false;
+        return;
+      }
+
+      if (data.user) {
+        window.location.href = "admin-dashboard.html";
+      }
+    });
+  </script>
+</body>
+</html>

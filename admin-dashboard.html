@@ -1053,4 +1053,76 @@
 
 
       if (!confirmed) {
-       
+        return;
+      }
+
+
+      const {
+        error
+      } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", product.id);
+
+
+      if (error) {
+
+        showMessage(
+          "Delete failed: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      showMessage(
+        "Product deleted."
+      );
+
+
+      loadProducts();
+
+    }
+
+
+    logoutButton.addEventListener(
+      "click",
+      async () => {
+
+        await supabase.auth.signOut();
+
+        window.location.href =
+          "admin.html";
+
+      }
+    );
+
+
+    const user =
+      await checkUser();
+
+
+    if (user) {
+
+  try {
+
+    await loadProducts();
+
+  } catch (error) {
+
+    productsContainer.textContent =
+      "Dashboard error: " + error.message;
+
+    console.error(error);
+
+  }
+
+}
+
+    
+
+  </script>
+
+</body>
+</html>

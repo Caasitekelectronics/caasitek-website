@@ -8,8 +8,8 @@
 
   <style>
     .admin-container {
-      max-width: 1000px;
-      margin: 40px auto;
+      max-width: 1100px;
+      margin: 30px auto;
       padding: 20px;
     }
 
@@ -18,59 +18,166 @@
       justify-content: space-between;
       align-items: center;
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .admin-card {
       background: #fff;
-      padding: 20px;
-      border-radius: 12px;
+      padding: 22px;
+      border-radius: 14px;
       margin-bottom: 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    .admin-card input,
-    .admin-card select {
+    .admin-card h2 {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea,
+    select {
       width: 100%;
       padding: 12px;
-      margin: 6px 0 14px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
       box-sizing: border-box;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .checkbox-row label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 500;
+    }
+
+    .checkbox-row input {
+      width: auto;
     }
 
     button {
-      padding: 10px 16px;
+      padding: 11px 17px;
       cursor: pointer;
       border: 0;
-      border-radius: 6px;
+      border-radius: 7px;
+      font-weight: 600;
+    }
+
+    .primary-button {
+      margin-top: 18px;
+    }
+
+    .cancel-button {
+      margin-top: 18px;
+      margin-left: 8px;
     }
 
     .product {
+      padding: 18px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product:last-child {
+      border-bottom: 0;
+    }
+
+    .product-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 15px;
-      padding: 15px 0;
-      border-bottom: 1px solid #ddd;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .product-details {
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .product-status {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: #eee;
     }
 
     .product-actions {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     #message {
       margin: 15px 0;
+      font-weight: 600;
     }
 
-    @media (max-width: 650px) {
-      .product {
-        flex-direction: column;
-        align-items: flex-start;
+    .editing-title {
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field.full {
+        grid-column: auto;
       }
 
       .admin-header {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .product-top {
+        flex-direction: column;
       }
     }
   </style>
@@ -85,8 +192,12 @@
         <a class="brand" href="index.html">
           <span>CT</span> CAASITEK
         </a>
+
         <h1>Admin Dashboard</h1>
-        <p>Manage your CAASITEK products and prices.</p>
+
+        <p>
+          Manage your CAASITEK products, prices and stock.
+        </p>
       </div>
 
       <button id="logoutButton">
@@ -96,72 +207,215 @@
 
     <p id="message"></p>
 
+    <!-- PRODUCT FORM -->
     <section class="admin-card">
-      <h2>Add Product</h2>
+
+      <h2 id="formTitle">Add Product</h2>
 
       <form id="productForm">
 
-        <label for="name">Product Name</label>
-        <input
-          id="name"
-          type="text"
-          placeholder="e.g. iPhone 17 Pro Max"
-          required
-        >
+        <input type="hidden" id="productId">
 
-        <label for="category">Category</label>
-        <input
-          id="category"
-          type="text"
-          placeholder="e.g. iPhone"
-          required
-        >
+        <div class="form-grid">
 
-        <label for="price">Price</label>
-        <input
-          id="price"
-          type="number"
-          placeholder="e.g. 28000"
-          required
-        >
+          <div class="field">
+            <label for="name">Product Name</label>
 
-        <button type="submit">
+            <input
+              id="name"
+              type="text"
+              placeholder="e.g. iPhone 17 Pro Max"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+
+            <input
+              id="category"
+              type="text"
+              placeholder="e.g. iPhone"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="price">Price (K)</label>
+
+            <input
+              id="price"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="28000"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="storage">Storage</label>
+
+            <input
+              id="storage"
+              type="text"
+              placeholder="e.g. 256GB"
+            >
+          </div>
+
+          <div class="field">
+            <label for="condition">Condition</label>
+
+            <select id="condition">
+              <option value="">Select condition</option>
+              <option value="Brand New">Brand New</option>
+              <option value="New">New</option>
+              <option value="Open Box">Open Box</option>
+              <option value="Used">Used</option>
+              <option value="Refurbished">Refurbished</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="warranty">Warranty</label>
+
+            <input
+              id="warranty"
+              type="text"
+              placeholder="e.g. 6 Months"
+            >
+          </div>
+
+          <div class="field">
+            <label for="stock">Stock</label>
+
+            <input
+              id="stock"
+              type="number"
+              min="0"
+              step="1"
+              value="1"
+            >
+          </div>
+
+          <div class="field">
+            <label for="image">Image URL</label>
+
+            <input
+              id="image"
+              type="url"
+              placeholder="https://..."
+            >
+          </div>
+
+          <div class="field full">
+            <label for="description">Description</label>
+
+            <textarea
+              id="description"
+              placeholder="Describe the product..."
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="checkbox-row">
+
+          <label>
+            <input
+              id="featured"
+              type="checkbox"
+            >
+            Featured product
+          </label>
+
+          <label>
+            <input
+              id="active"
+              type="checkbox"
+              checked
+            >
+            Active / visible
+          </label>
+
+        </div>
+
+        <button
+          id="saveButton"
+          class="primary-button"
+          type="submit"
+        >
           Add Product
         </button>
 
+        <button
+          id="cancelButton"
+          class="cancel-button"
+          type="button"
+          hidden
+        >
+          Cancel Edit
+        </button>
+
       </form>
+
     </section>
 
+    <!-- PRODUCTS -->
     <section class="admin-card">
+
       <h2>Current Products</h2>
 
       <div id="products">
         Loading products...
       </div>
+
     </section>
 
   </main>
+
 
   <script type="module">
 
     import { createClient } from
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+
     const SUPABASE_URL =
       "https://njvagupehnpmzjxjebfy.supabase.co";
 
+
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_My7phM94P5foLkK565nkXw_Pj8DlShZ";
+
 
     const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
 
-    const message = document.getElementById("message");
-    const productsContainer = document.getElementById("products");
-    const productForm = document.getElementById("productForm");
-    const logoutButton = document.getElementById("logoutButton");
+
+    const message =
+      document.getElementById("message");
+
+    const productsContainer =
+      document.getElementById("products");
+
+    const productForm =
+      document.getElementById("productForm");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const formTitle =
+      document.getElementById("formTitle");
+
+    const saveButton =
+      document.getElementById("saveButton");
+
+    const cancelButton =
+      document.getElementById("cancelButton");
+
 
     async function checkUser() {
 
@@ -169,154 +423,634 @@
         data: { user }
       } = await supabase.auth.getUser();
 
+
       if (!user) {
+
         window.location.href = "admin.html";
+
         return null;
       }
 
-      if (user.email !== "isaacmwale3024@icloud.com") {
+
+      if (
+        user.email !==
+        "isaacmwale3024@icloud.com"
+      ) {
+
         await supabase.auth.signOut();
+
         window.location.href = "admin.html";
+
         return null;
       }
+
 
       return user;
     }
 
+
+    function showMessage(text) {
+
+      message.textContent = text;
+
+      setTimeout(() => {
+
+        if (message.textContent === text) {
+          message.textContent = "";
+        }
+
+      }, 4000);
+
+    }
+
+
+    function escapeHTML(value) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent =
+        value ?? "";
+
+      return div.innerHTML;
+    }
+
+
     async function loadProducts() {
 
-      productsContainer.textContent = "Loading products...";
+      productsContainer.textContent =
+        "Loading products...";
 
-      const { data, error } = await supabase
+
+      const {
+        data,
+        error
+      } = await supabase
         .from("products")
         .select("*")
         .order("name");
 
+
       if (error) {
+
         productsContainer.textContent =
-          "Unable to load products: " + error.message;
+          "Unable to load products: " +
+          error.message;
+
         return;
       }
 
+
       if (!data || data.length === 0) {
+
         productsContainer.textContent =
           "No products found.";
+
         return;
       }
+
 
       productsContainer.innerHTML = "";
 
+
       data.forEach(product => {
 
-        const item = document.createElement("div");
-        item.className = "product";
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "product";
+
+
+        const stock =
+          Number(product.stock ?? 0);
+
+
+        const activeText =
+          product.active
+            ? "Active"
+            : "Inactive";
+
+
+        const featuredText =
+          product.featured
+            ? "Featured"
+            : "Not Featured";
+
 
         item.innerHTML = `
-          <div>
-            <strong>${product.name}</strong>
-            <div>${product.category || ""}</div>
-            <div>K${Number(product.price || 0).toLocaleString()}</div>
+
+          <div class="product-top">
+
+            <div>
+
+              <div class="product-name">
+                ${escapeHTML(product.name)}
+              </div>
+
+              <div class="product-details">
+
+                <strong>
+                  K${Number(
+                    product.price || 0
+                  ).toLocaleString()}
+                </strong>
+
+                ${product.category
+                  ? " • " +
+                    escapeHTML(product.category)
+                  : ""}
+
+                ${product.storage
+                  ? " • " +
+                    escapeHTML(product.storage)
+                  : ""}
+
+                <br>
+
+                Stock:
+                ${stock}
+
+                ${product.condition
+                  ? " • " +
+                    escapeHTML(product.condition)
+                  : ""}
+
+                ${product.warranty
+                  ? " • Warranty: " +
+                    escapeHTML(product.warranty)
+                  : ""}
+
+              </div>
+
+              <div class="product-status">
+
+                <span class="badge">
+                  ${activeText}
+                </span>
+
+                <span class="badge">
+                  ${featuredText}
+                </span>
+
+              </div>
+
+            </div>
+
           </div>
+
 
           <div class="product-actions">
-            <button data-id="${product.id}" class="delete-button">
+
+            <button
+              class="edit-button"
+              data-id="${product.id}"
+            >
+              Edit
+            </button>
+
+            <button
+              class="toggle-button"
+              data-id="${product.id}"
+              data-active="${product.active}"
+            >
+              ${product.active
+                ? "Deactivate"
+                : "Activate"}
+            </button>
+
+            <button
+              class="featured-button"
+              data-id="${product.id}"
+              data-featured="${product.featured}"
+            >
+              ${product.featured
+                ? "Remove Featured"
+                : "Make Featured"}
+            </button>
+
+            <button
+              class="delete-button"
+              data-id="${product.id}"
+            >
               Delete
             </button>
+
           </div>
+
         `;
 
+
         productsContainer.appendChild(item);
-      });
 
-      document.querySelectorAll(".delete-button")
-        .forEach(button => {
 
-          button.addEventListener("click", async () => {
+        item.querySelector(".edit-button")
+          .addEventListener("click", () => {
 
-            const confirmed =
-              confirm("Delete this product?");
+            startEdit(product);
 
-            if (!confirmed) return;
-
-            const { error } = await supabase
-              .from("products")
-              .delete()
-              .eq("id", button.dataset.id);
-
-            if (error) {
-              message.textContent =
-                "Delete failed: " + error.message;
-              return;
-            }
-
-            message.textContent =
-              "Product deleted.";
-
-            loadProducts();
           });
 
-        });
+
+        item.querySelector(".toggle-button")
+          .addEventListener("click", async () => {
+
+            await toggleActive(product);
+
+          });
+
+
+        item.querySelector(".featured-button")
+          .addEventListener("click", async () => {
+
+            await toggleFeatured(product);
+
+          });
+
+
+        item.querySelector(".delete-button")
+          .addEventListener("click", async () => {
+
+            await deleteProduct(product);
+
+          });
+
+      });
+
     }
 
-    productForm.addEventListener("submit", async (event) => {
 
-      event.preventDefault();
+    function startEdit(product) {
 
-      const name =
-        document.getElementById("name").value.trim();
+      document.getElementById("productId").value =
+        product.id ?? "";
 
-      const category =
-        document.getElementById("category").value.trim();
+      document.getElementById("name").value =
+        product.name ?? "";
 
-      const price =
-        Number(document.getElementById("price").value);
+      document.getElementById("category").value =
+        product.category ?? "";
 
-      if (!name || !category || !price) {
-        message.textContent =
-          "Please complete all fields.";
+      document.getElementById("description").value =
+        product.description ?? "";
 
-        return;
-      }
+      document.getElementById("price").value =
+        product.price ?? "";
 
-      const { error } = await supabase
-        .from("products")
-        .insert({
-          name,
-          category,
-          price
-        });
+      document.getElementById("storage").value =
+        product.storage ?? "";
 
-      if (error) {
+      document.getElementById("condition").value =
+        product.condition ?? "";
 
-        message.textContent =
-          "Could not add product: " + error.message;
+      document.getElementById("warranty").value =
+        product.warranty ?? "";
 
-        return;
-      }
+      document.getElementById("stock").value =
+        product.stock ?? 0;
 
-      message.textContent =
-        "Product added successfully.";
+      document.getElementById("image").value =
+        product.image ?? "";
+
+      document.getElementById("featured").checked =
+        Boolean(product.featured);
+
+      document.getElementById("active").checked =
+        product.active !== false;
+
+
+      formTitle.textContent =
+        "Edit Product";
+
+      saveButton.textContent =
+        "Save Changes";
+
+      cancelButton.hidden =
+        false;
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    function resetForm() {
 
       productForm.reset();
 
-      loadProducts();
-    });
+      document.getElementById("productId").value =
+        "";
 
-    logoutButton.addEventListener("click", async () => {
+      document.getElementById("stock").value =
+        1;
 
-      await supabase.auth.signOut();
+      document.getElementById("active").checked =
+        true;
 
-      window.location.href = "admin.html";
+      document.getElementById("featured").checked =
+        false;
 
-    });
+      formTitle.textContent =
+        "Add Product";
 
-    const user = await checkUser();
+      saveButton.textContent =
+        "Add Product";
 
-    if (user) {
-      loadProducts();
+      cancelButton.hidden =
+        true;
+
     }
 
-  </script>
 
-</body>
-</html>
+    productForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        const id =
+          document.getElementById("productId").value;
+
+
+        const name =
+          document.getElementById("name")
+            .value.trim();
+
+
+        const category =
+          document.getElementById("category")
+            .value.trim();
+
+
+        const description =
+          document.getElementById("description")
+            .value.trim();
+
+
+        const price =
+          Number(
+            document.getElementById("price").value
+          );
+
+
+        const storage =
+          document.getElementById("storage")
+            .value.trim();
+
+
+        const condition =
+          document.getElementById("condition")
+            .value;
+
+
+        const warranty =
+          document.getElementById("warranty")
+            .value.trim();
+
+
+        const stock =
+          Number(
+            document.getElementById("stock").value
+          );
+
+
+        const image =
+          document.getElementById("image")
+            .value.trim();
+
+
+        const featured =
+          document.getElementById("featured")
+            .checked;
+
+
+        const active =
+          document.getElementById("active")
+            .checked;
+
+
+        if (
+          !name ||
+          !category ||
+          Number.isNaN(price)
+        ) {
+
+          showMessage(
+            "Please enter a product name, category and price."
+          );
+
+          return;
+        }
+
+
+        if (Number.isNaN(stock) || stock < 0) {
+
+          showMessage(
+            "Stock must be 0 or greater."
+          );
+
+          return;
+        }
+
+
+        const productData = {
+
+          name,
+
+          category,
+
+          description:
+            description || null,
+
+          price,
+
+          storage:
+            storage || null,
+
+          condition:
+            condition || null,
+
+          warranty:
+            warranty || null,
+
+          stock,
+
+          image:
+            image || null,
+
+          featured,
+
+          active
+
+        };
+
+
+        saveButton.disabled =
+          true;
+
+
+        if (id) {
+
+          const {
+            error
+          } = await supabase
+            .from("products")
+            .update(productData)
+            .eq("id", id);
+
+
+          if (error) {
+
+            showMessage(
+              "Could not update product: " +
+              error.message
+            );
+
+            saveButton.disabled =
+              false;
+
+            return;
+          }
+
+
+          showMessage(
+            "Product updated successfully."
+          );
+
+        } else {
+
+          const {
+            error
+          } = await supabase
+            .from("products")
+            .insert(productData);
+
+
+          if (error) {
+
+            showMessage(
+              "Could not add product: " +
+              error.message
+            );
+
+            saveButton.disabled =
+              false;
+
+            return;
+          }
+
+
+          showMessage(
+            "Product added successfully."
+          );
+
+        }
+
+
+        resetForm();
+
+        saveButton.disabled =
+          false;
+
+        loadProducts();
+
+      }
+    );
+
+
+    cancelButton.addEventListener(
+      "click",
+      () => {
+
+        resetForm();
+
+      }
+    );
+
+
+    async function toggleActive(product) {
+
+      const {
+        error
+      } = await supabase
+        .from("products")
+        .update({
+          active: !product.active
+        })
+        .eq("id", product.id);
+
+
+      if (error) {
+
+        showMessage(
+          "Could not change product status: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      showMessage(
+        product.active
+          ? "Product deactivated."
+          : "Product activated."
+      );
+
+
+      loadProducts();
+
+    }
+
+
+    async function toggleFeatured(product) {
+
+      const {
+        error
+      } = await supabase
+        .from("products")
+        .update({
+          featured: !product.featured
+        })
+        .eq("id", product.id);
+
+
+      if (error) {
+
+        showMessage(
+          "Could not change featured status: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      showMessage(
+        product.featured
+          ? "Product removed from featured."
+          : "Product marked as featured."
+      );
+
+
+      loadProducts();
+
+    }
+
+
+    async function deleteProduct(product) {
+
+      const confirmed =
+        confirm(
+          "Delete " +
+          product.name +
+          "? This cannot be undone."
+        );
+
+
+      if (!confirmed) {
+       

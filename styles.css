@@ -448,4 +448,144 @@ footer p{
   .location-card h3{
     font-size:24px;
   }
+}/* PREMIUM PRODUCT CARD UPGRADE */
+
+.product-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,.06);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.12);
+}
+
+.product-image {
+  height: 300px;
+  background: #f8f8f8;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 20px;
+  transition: transform .3s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.04);
+}
+
+.product-content {
+  padding: 22px;
+}
+
+.product-category {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.product-card h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.product-price {
+  font-size: 25px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.product-meta {
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.product-warranty {
+  color: #16833b;
+  font-size: 12px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stock {
+  font-size: 12px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.product-description {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.product-whatsapp {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border-radius: 11px;
+  background: var(--orange);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+
+.product-whatsapp:hover {
+  background: #d95716;
+}
+
+.product-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--orange);
+  color: #fff;
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 900;
+  z-index: 2;
+}
+
+/* MOBILE PRODUCT CARDS */
+
+@media (max-width: 520px) {
+
+  .product-image {
+    height: 300px;
+  }
+
+  .product-content {
+    padding: 20px;
+  }
+
+  .product-card h3 {
+    font-size: 19px;
+  }
+
+  .product-price {
+    font-size: 24px;
+  }
+
 }

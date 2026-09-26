@@ -757,4 +757,47 @@ nav a:hover::after {
   .nav .brand img {
     height: 38px;
   }
+}/* PREMIUM FOOTER */
+
+footer {
+  position: relative;
+  padding: 65px 8% 45px;
+  background: #0b0b0b;
+  border-top: 3px solid var(--orange);
+}
+
+footer .brand {
+  color: #fff;
+  font-size: 21px;
+}
+
+footer .brand span {
+  color: var(--orange);
+}
+
+footer strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+footer p {
+  margin: 6px 0;
+  color: #999;
+  line-height: 1.7;
+}
+
+footer > div {
+  min-width: 0;
+}
+
+footer > div:first-child p {
+  max-width: 300px;
+}
+
+@media (max-width: 520px) {
+  footer {
+    padding: 50px 6% 35px;
+  }
 }

@@ -908,4 +908,13 @@ footer > div:first-child p {
   footer {
     gap: 25px;
   }
+}/* CAASITEK HERO LOGO */
+
+.hero-logo {
+  width: min(260px, 80%);
+  height: auto;
+  max-height: 150px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: auto;
 }

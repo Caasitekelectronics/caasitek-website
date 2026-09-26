@@ -36,8 +36,13 @@ async function loadProducts() {
       ? `<span class="product-warranty">✓ ${product.warranty} warranty</span>`
       : `<span class="product-warranty">✓ Warranty available</span>`;
     const image = product.image
-      ? `<img src="${product.image}" alt="${product.name}" loading="lazy">`
-      : `<div class="product-placeholder">CT</div>`;
+  ? `<img src="${product.image}" alt="${product.name}" loading="lazy">`
+  : `<div class="product-placeholder">
+      <img
+        src="https://njvagupehnpmzjxjebfy.supabase.co/storage/v1/object/public/product-images/site-logo.png"
+        alt="CAASITEK Electronics"
+      >
+    </div>`;
     const featuredBadge = product.featured
       ? `<span class="product-badge">FEATURED</span>`
       : "";

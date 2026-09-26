@@ -351,4 +351,53 @@ footer p{
   .product-image{
     height:280px;
   }
+}.location-section{
+  padding:80px 8%;
+  background:#fff7f1;
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:40px;
+  align-items:center;
+}
+
+.location-content h2{
+  font-size:42px;
+  margin:8px 0 15px;
+}
+
+.location-content p:not(.eyebrow){
+  color:#666;
+  line-height:1.7;
+  font-size:17px;
+  margin-bottom:25px;
+}
+
+.location-map{
+  overflow:hidden;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.12);
+  background:#eee;
+}
+
+.location-map iframe{
+  display:block;
+  width:100%;
+  min-height:350px;
+}
+
+@media(max-width:850px){
+  .location-section{
+    grid-template-columns:1fr;
+    padding:60px 6%;
+  }
+
+  .location-content h2{
+    font-size:36px;
+  }
+}
+
+@media(max-width:520px){
+  .location-map iframe{
+    min-height:300px;
+  }
 }

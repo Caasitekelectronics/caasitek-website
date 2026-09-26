@@ -800,4 +800,37 @@ footer > div:first-child p {
   footer {
     padding: 50px 6% 35px;
   }
+}/* WHATSAPP CTA POLISH */
+
+.product-whatsapp {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(243,107,33,.20);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.product-whatsapp::after {
+  content: "→";
+  margin-left: 8px;
+  font-size: 16px;
+  transition: margin-left .2s ease;
+}
+
+.product-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(243,107,33,.28);
+}
+
+.product-whatsapp:hover::after {
+  margin-left: 12px;
+}
+
+.cta .btn {
+  box-shadow: 0 10px 25px rgba(243,107,33,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.cta .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(243,107,33,.35);
 }

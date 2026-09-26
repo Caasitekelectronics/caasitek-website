@@ -400,4 +400,52 @@ footer p{
   .location-map iframe{
     min-height:300px;
   }
+}.location-card{
+  min-height:350px;
+  background:linear-gradient(145deg,#f36b21,#b51f14);
+  color:#fff;
+  border-radius:20px;
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+.location-icon{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.location-card h3{
+  font-size:28px;
+  margin:0 0 12px;
+}
+
+.location-card p{
+  margin:4px 0;
+  color:rgba(255,255,255,.85);
+  line-height:1.5;
+}
+
+.location-card .btn{
+  margin-top:25px;
+  align-self:flex-start;
+  background:#fff;
+  color:#111;
+}
+
+.location-card .btn:hover{
+  background:#f5f5f5;
+}
+
+@media(max-width:520px){
+  .location-card{
+    min-height:300px;
+    padding:30px;
+  }
+
+  .location-card h3{
+    font-size:24px;
+  }
 }

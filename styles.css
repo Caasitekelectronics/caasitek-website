@@ -917,4 +917,103 @@ footer > div:first-child p {
   object-fit: contain;
   display: block;
   margin-bottom: auto;
+}/* =========================================================
+CAASITEK — EXACT LOGO / BRAND INTEGRATION
+========================================================= */
+
+/* Navigation logo */
+.nav .brand {
+display: flex;
+align-items: center;
+text-decoration: none;
+line-height: 0;
+}
+
+.nav .brand img {
+height: 46px;
+width: auto;
+max-width: 220px;
+display: block;
+object-fit: contain;
+background: transparent;
+border: 0;
+box-shadow: none;
+}
+
+/* Hero logo */
+.hero-card {
+align-items: flex-start;
+}
+
+.hero-logo {
+width: min(300px, 100%);
+height: auto;
+max-height: 170px;
+object-fit: contain;
+object-position: left center;
+display: block;
+margin: 0 auto auto 0;
+background: transparent;
+border: 0;
+box-shadow: none;
+filter: none;
+}
+
+/* Make the logo feel naturally placed on the orange hero */
+.hero-card {
+padding: 42px;
+}
+
+.hero-card strong {
+margin-top: 25px;
+}
+
+/* Footer — use the real logo instead of the old CT text */
+footer .brand {
+display: inline-flex;
+align-items: center;
+line-height: 0;
+}
+
+footer .brand img {
+height: 45px;
+width: auto;
+max-width: 220px;
+display: block;
+object-fit: contain;
+background: transparent;
+}
+
+/* Remove the old text-logo styling if it is still present */
+footer .brand span {
+display: none;
+}
+
+/* Keep the logo balanced on mobile */
+@media (max-width: 850px) {
+.nav .brand img {
+height: 40px;
+max-width: 190px;
+}
+
+.hero-logo {
+width: min(260px, 90%);
+max-height: 145px;
+}
+}
+
+@media (max-width: 520px) {
+.nav .brand img {
+height: 36px;
+max-width: 170px;
+}
+
+.hero-card {
+padding: 30px;
+}
+
+.hero-logo {
+width: min(230px, 100%);
+max-height: 125px;
+}
 }

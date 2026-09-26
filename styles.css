@@ -833,4 +833,79 @@ footer > div:first-child p {
 .cta .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 30px rgba(243,107,33,.35);
+}/* MOBILE POLISH */
+
+@media (max-width: 520px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .hero {
+    padding: 55px 6% 45px;
+  }
+
+  .hero h1 {
+    font-size: 44px;
+    line-height: 1;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions .btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .section-head {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .section h2,
+  .cta h2,
+  .location-content h2 {
+    font-size: 34px;
+  }
+
+  .strip {
+    padding: 16px 5%;
+  }
+
+  .strip div {
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .product-image {
+    height: 290px;
+  }
+
+  .product-content {
+    padding: 20px;
+  }
+
+  .location-section {
+    padding: 55px 6%;
+  }
+
+  .location-card {
+    min-height: 280px;
+    padding: 28px;
+  }
+
+  .cta {
+    padding: 65px 6%;
+  }
+
+  footer {
+    gap: 25px;
+  }
 }
